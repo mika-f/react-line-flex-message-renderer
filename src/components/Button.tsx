@@ -5,9 +5,7 @@ interface ButtonProps {
 }
 
 export const Button = ({ label, onClick, primary }: ButtonProps) => {
-  const mode = primary 
-    ? 'bg-blue-600 text-white' 
-    : 'bg-gray-200 text-gray-800';
+  const mode = primary ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800";
 
   return (
     <button
