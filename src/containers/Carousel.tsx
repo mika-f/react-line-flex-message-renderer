@@ -1,14 +1,18 @@
-import { Bubble } from "./Bubble";
+import type { ActionTypes } from "../components/actions";
+import { Bubble, type BubbleProps } from "./Bubble";
 
 interface CarouselProps {
-  contents: string[];
+  type?: "carousel";
+  contents: BubbleProps[];
+
+  onAction?: (action: ActionTypes) => void;
 }
 
-export function Carousel({ contents }: CarouselProps) {
+export function Carousel({ contents, onAction }: CarouselProps) {
   return (
-    <div>
+    <div style={{ display: "flex", gap: 12 }}>
       {contents.map((content, index) => (
-        <Bubble key={index} size="mega" />
+        <Bubble key={index} {...content} onAction={onAction} />
       ))}
     </div>
   );

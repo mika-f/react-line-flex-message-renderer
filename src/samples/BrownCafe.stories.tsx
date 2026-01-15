@@ -12,6 +12,7 @@ type Story = StoryObj<typeof FlexMessageRenderer>;
 
 export const Primary: Story = {
   args: {
+    onAction: (action) => alert(JSON.stringify(action)),
     json: `
 {
   "type": "bubble",
