@@ -5,7 +5,16 @@ import dts from "vite-plugin-dts";
 import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), dts({ insertTypesEntry: true })],
+  plugins: [
+    react(),
+    tailwindcss(),
+    dts({
+      include: ["src/**/*"],
+      exclude: ["src/**/*.stories.{ts,tsx}"],
+      outDir: "dist",
+      rollupTypes: true,
+    }),
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),

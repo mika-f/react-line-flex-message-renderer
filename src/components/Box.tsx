@@ -95,6 +95,7 @@ export function Box({
   paddingBottom,
   paddingStart,
   paddingEnd,
+  action,
   position,
   offsetTop,
   offsetBottom,
@@ -145,6 +146,7 @@ export function Box({
   return (
     <div
       className="box"
+      onClick={() => onAction?.(action!)}
       style={{
         display: "flex",
         position: position,

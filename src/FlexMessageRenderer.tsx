@@ -1,4 +1,4 @@
-import type { ActionCallback } from "./components/actions";
+import type { ActionCallback, ActionTypes } from "./components/actions";
 import { Bubble } from "./containers/Bubble";
 import { Carousel } from "./containers/Carousel";
 
@@ -20,10 +20,16 @@ export function FlexMessageRenderer({
 }: FlexMessageRendererProps) {
   const data = JSON.parse(json);
 
+  const onClick = (action?: ActionTypes) => {
+    if (action) {
+      onAction?.(action);
+    }
+  };
+
   return (
     <>
-      {data.type === "carousel" && <Carousel {...data} onAction={onAction} />}
-      {data.type === "bubble" && <Bubble {...data} onAction={onAction} />}
+      {data.type === "carousel" && <Carousel {...data} onAction={onClick} />}
+      {data.type === "bubble" && <Bubble {...data} onAction={onClick} />}
     </>
   );
 }
