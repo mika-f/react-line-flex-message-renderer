@@ -3,6 +3,7 @@
   "description": "This is a React component library for rendering LINE Flex Messages.",
   "license": "MIT",
   "version": "0.1.1",
+  "repository": "https://github.com/ohmyteeth/react-line-flex-message-renderer.git",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
