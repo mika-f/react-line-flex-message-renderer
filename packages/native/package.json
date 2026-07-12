@@ -1,0 +1,82 @@
+{
+  "name": "@ohmyteeth/react-native-line-flex-message-renderer",
+  "version": "0.1.0",
+  "description": "This is a core logic library for rendering LINE Flex Messages in React and React Native.",
+  "license": "MIT",
+  "author": "Oh my teeth, Co.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ohmyteeth/react-line-flex-message-renderer.git"
+  },
+  "homepage": "https://github.com/ohmyteeth/react-line-flex-message-renderer",
+  "bugs": {
+    "url": "https://github.com/ohmyteeth/react-line-flex-message-renderer/issues"
+  },
+  "keywords": [
+    "LINE",
+    "Flex Message",
+    "React",
+    "React Native"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ohmyteeth/line-flex-message-renderer-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@gorhom/bottom-sheet": "^5.2.14",
+    "@oxfmt/binding-darwin-arm64": "^0.58.0",
+    "@oxfmt/binding-win32-x64-msvc": "^0.58.0",
+    "@oxlint/binding-darwin-arm64": "^1.73.0",
+    "@oxlint/binding-win32-x64-msvc": "^1.73.0",
+    "@react-native-async-storage/async-storage": "^3.1.1",
+    "@react-native-community/datetimepicker": "^9.1.0",
+    "@react-native-community/slider": "^5.2.0",
+    "@storybook/addon-ondevice-actions": "^10.5.0",
+    "@storybook/addon-ondevice-controls": "^10.5.0",
+    "@storybook/react-native": "^10.5.0",
+    "@storybook/react-native-ui-lite": "^10.5.0",
+    "@types/node": "^26.1.1",
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-native": "^0.86.0",
+    "react-native-gesture-handler": "^3.0.2",
+    "react-native-reanimated": "^4.5.1",
+    "react-native-safe-area-context": "^5.8.0",
+    "react-native-svg": "^15.15.5",
+    "react-native-worklets": "^0.10.2",
+    "storybook": "^10.5.0",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7",
+    "react-native": "^0.86.0"
+  },
+  "packageManager": "pnpm@11.12.0"
+}
