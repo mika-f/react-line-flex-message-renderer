@@ -3,7 +3,6 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    "rootDirs": [".", "generated"],
     // "outDir": "./dist",
 
     // Environment Settings
@@ -38,11 +37,8 @@
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
+    "noUncheckedSideEffectImports": false,
     "moduleDetection": "force",
     "skipLibCheck": true
-  },
-  "cmkOptions": {
-    "enabled": true
   }
 }

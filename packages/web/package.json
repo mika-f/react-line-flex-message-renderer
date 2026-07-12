@@ -27,53 +27,50 @@
     "LICENSE"
   ],
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    },
+    "./style.css": {
+      "import": "./dist/style.css"
     }
   },
   "scripts": {
-    "build": "tsup",
+    "generate": "cmk",
+    "build": "pnpm run generate && tsdown",
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
-    "test": "vitest run",
-    "test:watch": "vitest watch",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@ohmyteeth/line-flex-message-renderer-core": "workspace:*"
+    "@ohmyteeth/line-flex-message-renderer-core": "workspace:*",
+    "clsx": "^2.1.1"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^5.2.1",
+    "@css-modules-kit/codegen": "^1.4.0",
     "@oxfmt/binding-darwin-arm64": "^0.58.0",
     "@oxfmt/binding-win32-x64-msvc": "^0.58.0",
     "@oxlint/binding-darwin-arm64": "^1.73.0",
     "@oxlint/binding-win32-x64-msvc": "^1.73.0",
-    "@storybook/addon-a11y": "^10.5.0",
-    "@storybook/addon-docs": "^10.5.0",
-    "@storybook/addon-mcp": "^0.7.0",
-    "@storybook/addon-vitest": "^10.5.0",
-    "@storybook/react-vite": "^10.5.0",
+    "@tsdown/css": "^0.22.5",
     "@types/node": "^26.1.1",
-    "@vitest/browser-playwright": "4.1.10",
-    "@vitest/coverage-v8": "4.1.10",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
-    "playwright": "^1.61.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "storybook": "^10.5.0",
-    "tsup": "^8.5.1",
-    "typescript": "^7.0.2",
-    "vitest": "^4.1.10"
+    "tsdown": "^0.22.5",
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
-  "packageManager": "pnpm@11.12.0"
+  "packageManager": "pnpm@11.12.0",
+  "sideEffects": [
+    "*.css"
+  ]
 }

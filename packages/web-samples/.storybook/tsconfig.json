@@ -1,9 +1,9 @@
+// why VSCode loading nearest tsconfig.json instead of the one in the current folder?
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    "rootDirs": [".", "generated"],
     // "outDir": "./dist",
 
     // Environment Settings
@@ -38,11 +38,8 @@
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
+    "noUncheckedSideEffectImports": false,
     "moduleDetection": "force",
     "skipLibCheck": true
-  },
-  "cmkOptions": {
-    "enabled": true
   }
 }

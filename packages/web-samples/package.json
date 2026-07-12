@@ -1,5 +1,5 @@
 {
-  "name": "@ohmyteeth/line-flex-message-renderer-core",
+  "name": "@ohmyteeth/react-line-flex-message-renderer-samples",
   "version": "0.1.0",
   "description": "This is a core logic library for rendering LINE Flex Messages in React and React Native.",
   "license": "MIT",
@@ -27,40 +27,58 @@
     "LICENSE"
   ],
   "type": "module",
-  "main": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.mts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
-    "build": "tsdown",
+    "generate": "cmk",
+    "build": "pnpm run generate && tsdown",
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@ohmyteeth/react-line-flex-message-renderer": "workspace:*",
+    "@ohmyteeth/line-flex-message-renderer-sample-fixtures": "workspace:*"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.2.1",
+    "@css-modules-kit/codegen": "^1.4.0",
     "@oxfmt/binding-darwin-arm64": "^0.58.0",
     "@oxfmt/binding-win32-x64-msvc": "^0.58.0",
     "@oxlint/binding-darwin-arm64": "^1.73.0",
     "@oxlint/binding-win32-x64-msvc": "^1.73.0",
+    "@storybook/addon-a11y": "^10.5.0",
+    "@storybook/addon-docs": "^10.5.0",
+    "@storybook/addon-mcp": "^0.7.0",
+    "@storybook/addon-vitest": "^10.5.0",
+    "@storybook/react-vite": "^10.5.0",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitest/browser-playwright": "4.1.10",
+    "@vitest/coverage-v8": "4.1.10",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
+    "playwright": "^1.61.1",
     "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^10.5.0",
     "tsdown": "^0.22.5",
-    "typescript": "^7.0.2",
+    "typescript": "^5.8.2",
     "vitest": "^4.1.10"
   },
-  "packageManager": "pnpm@11.12.0",
   "peerDependencies": {
-    "react": "^19.2.7"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
-  "sideEffects": [
-    "*.css"
-  ]
+  "packageManager": "pnpm@11.12.0"
 }
