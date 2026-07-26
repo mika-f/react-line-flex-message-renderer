@@ -3,6 +3,7 @@ import {
   getMarginSize,
   getOffset,
   type ImageComponent,
+  type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import styles from "./image.module.css";
 
@@ -22,7 +23,15 @@ export const Image = ({
   aspectMode,
   backgroundColor,
   animated,
-}: ImageComponent) => {
+  action,
+  onClick,
+}: ImageComponent & { onClick?: ClickHandler | undefined }) => {
+  const handleClick = () => {
+    if (action) {
+      onClick?.(action);
+    }
+  };
+
   return (
     <div
       className={styles.img}
@@ -42,6 +51,7 @@ export const Image = ({
           width: getImageSize(size),
         }}
         src={url}
+        onClick={handleClick}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import {
   getOffset,
   renderComponent,
   type TextComponent,
+  type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import React from "react";
 import styles from "./text.module.css";
@@ -30,7 +31,15 @@ export const Text = ({
   color,
   style,
   decoration,
-}: TextComponent) => {
+  action,
+  onClick,
+}: TextComponent & { onClick?: ClickHandler | undefined }) => {
+  const handleClick = () => {
+    if (action) {
+      onClick?.(action);
+    }
+  };
+
   if (!text && !contents) {
     return null;
   }
@@ -60,7 +69,7 @@ export const Text = ({
 
   if (text) {
     return (
-      <div style={computedStyles}>
+      <div style={computedStyles} onClick={handleClick}>
         <p className={styles.text}>{text}</p>
       </div>
     );
@@ -68,7 +77,7 @@ export const Text = ({
 
   if (contents) {
     return (
-      <div style={computedStyles} className={styles.text}>
+      <div style={computedStyles} className={styles.text} onClick={handleClick}>
         <p
           style={{
             ...(wrap && {

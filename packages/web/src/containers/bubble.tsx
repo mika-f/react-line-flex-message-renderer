@@ -1,14 +1,38 @@
-import { renderComponent, type BubbleContainer } from "@ohmyteeth/line-flex-message-renderer-core";
+import {
+  renderComponent,
+  type Action,
+  type BubbleContainer,
+  type ClickHandler,
+} from "@ohmyteeth/line-flex-message-renderer-core";
 import styles from "./bubble.module.css";
 import clsx from "clsx";
 
-export const Bubble = ({ body, direction, footer, header, hero, size, style }: BubbleContainer) => {
+export const Bubble = ({
+  body,
+  direction,
+  footer,
+  header,
+  hero,
+  size,
+  style,
+  action,
+  onClick,
+}: BubbleContainer & { onClick?: ClickHandler | undefined }) => {
   const hasHero = !!hero;
   const hasFooter = !!footer;
   const hasHeader = !!header;
+  const handleClick = (action: Action) => {
+    if (onClick) {
+      onClick(action);
+    }
+  };
 
   return (
-    <div className={clsx(styles.bubble, styles[size ?? "mega"])} dir={direction}>
+    <div
+      className={clsx(styles.bubble, styles[size ?? "mega"])}
+      dir={direction}
+      onClick={action ? () => handleClick(action) : undefined}
+    >
       <div className={styles.inner}>
         {header && (
           <div
@@ -21,7 +45,7 @@ export const Bubble = ({ body, direction, footer, header, hero, size, style }: B
               borderColor: style?.header?.separatorColor ?? "#000",
             }}
           >
-            {renderComponent(header)}
+            {renderComponent(header, onClick)}
           </div>
         )}
 
@@ -30,7 +54,7 @@ export const Bubble = ({ body, direction, footer, header, hero, size, style }: B
             className={styles.hero}
             style={{ backgroundColor: style?.hero?.backgroundColor ?? "#fff" }}
           >
-            {renderComponent(hero)}
+            {renderComponent(hero, onClick)}
           </div>
         )}
 
@@ -45,7 +69,7 @@ export const Bubble = ({ body, direction, footer, header, hero, size, style }: B
             )}
             style={{ backgroundColor: style?.body?.backgroundColor ?? "#fff" }}
           >
-            {renderComponent(body)}
+            {renderComponent(body, onClick)}
           </div>
         )}
 
@@ -60,7 +84,7 @@ export const Bubble = ({ body, direction, footer, header, hero, size, style }: B
               borderColor: style?.footer?.separatorColor ?? "#000",
             }}
           >
-            {renderComponent(footer)}
+            {renderComponent(footer, onClick)}
           </div>
         )}
       </div>

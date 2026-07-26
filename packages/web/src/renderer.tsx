@@ -16,26 +16,25 @@ type FlexMessageRendererProps = {
   onAction?: (action: Action) => void;
 };
 
-export const FlexMessageRenderer = ({
-  json,
-  onAction,
-}: FlexMessageRendererProps) => {
+export const FlexMessageRenderer = ({ json, onAction }: FlexMessageRendererProps) => {
   const data = useMemo(() => {
     return JSON.parse(json) as CarouselContainer | BubbleContainer;
   }, [json]);
   const handleClick = useCallback(
     (action?: Action) => {
-      action && onAction?.(action);
+      if (action) {
+        onAction?.(action);
+      }
     },
     [onAction],
   );
 
   switch (data.type) {
     case "bubble":
-      return <Bubble {...data} />;
+      return <Bubble {...data} onClick={handleClick} />;
 
     case "carousel":
-      return <Carousel {...data} />;
+      return <Carousel {...data} onClick={handleClick} />;
 
     default:
       throw new Error(`Unsupported Flex Message type: ${data}`);

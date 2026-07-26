@@ -5,6 +5,7 @@ import {
   getSpacingSize,
   renderComponent,
   type BoxComponent,
+  type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import React from "react";
 import styles from "./box.module.css";
@@ -47,8 +48,16 @@ export const Box = ({
   justifyContent,
   alignItems,
   background,
-}: BoxComponent) => {
+  action,
+  onClick,
+}: BoxComponent & { onClick?: ClickHandler | undefined }) => {
   const bg = getBackgroundLinearGradient(background);
+  const handleClick = () => {
+    if (action) {
+      onClick?.(action);
+    }
+  };
+
   return (
     <div
       className={clsx(
@@ -98,6 +107,7 @@ export const Box = ({
         ...(bg && { background: bg }),
         ...(width && { flexShrink: 0 }),
       }}
+      onClick={handleClick}
     >
       {contents.map((content, i) => (
         <React.Fragment key={i}>{renderComponent(content)}</React.Fragment>

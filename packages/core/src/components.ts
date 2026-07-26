@@ -10,19 +10,22 @@ import type {
   TextComponent,
   VideoComponent,
 } from "./interfaces/components/index.js";
+import type { Action } from "./interfaces/index.js";
 
-const registry = new Map<string, (data: any) => React.ReactNode>();
+const registry = new Map<string, (data: any, onClick: ClickHandler) => React.ReactNode>();
+
+export type ClickHandler = (action: Action) => void;
 
 type ComponentRegistrar = {
-  box?: (data: BoxComponent) => React.ReactNode;
-  button?: (data: ButtonComponent) => React.ReactNode;
-  filler?: (data: FillerComponent) => React.ReactNode;
-  icon?: (data: IconComponent) => React.ReactNode;
-  image?: (data: ImageComponent) => React.ReactNode;
-  separator?: (data: SeparatorComponent) => React.ReactNode;
-  span?: (data: SpanComponent) => React.ReactNode;
-  text?: (data: TextComponent) => React.ReactNode;
-  video?: (data: VideoComponent) => React.ReactNode;
+  box?: (data: BoxComponent, onClick: ClickHandler) => React.ReactNode;
+  button?: (data: ButtonComponent, onClick: ClickHandler) => React.ReactNode;
+  filler?: (data: FillerComponent, onClick: ClickHandler) => React.ReactNode;
+  icon?: (data: IconComponent, onClick: ClickHandler) => React.ReactNode;
+  image?: (data: ImageComponent, onClick: ClickHandler) => React.ReactNode;
+  separator?: (data: SeparatorComponent, onClick: ClickHandler) => React.ReactNode;
+  span?: (data: SpanComponent, onClick: ClickHandler) => React.ReactNode;
+  text?: (data: TextComponent, onClick: ClickHandler) => React.ReactNode;
+  video?: (data: VideoComponent, onClick: ClickHandler) => React.ReactNode;
 };
 
 export const registerComponents = (components: ComponentRegistrar) => {
@@ -44,6 +47,7 @@ export const renderComponent = (
     | SpanComponent
     | TextComponent
     | VideoComponent,
+  onClick?: (action: Action) => void,
 ) => {
   const componentType = data.type;
   const component = registry.get(componentType);
@@ -51,5 +55,11 @@ export const renderComponent = (
     throw new Error(`Component type "${componentType}" is not registered.`);
   }
 
-  return component(data);
+  const handleClick = (action: Action) => {
+    if (onClick) {
+      onClick(action);
+    }
+  };
+
+  return component(data, handleClick);
 };

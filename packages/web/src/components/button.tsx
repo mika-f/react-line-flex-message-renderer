@@ -3,6 +3,7 @@ import {
   getMarginSize,
   getOffset,
   type ButtonComponent,
+  type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import styles from "./button.module.css";
 
@@ -21,8 +22,14 @@ export const Button = ({
   position,
   scaling,
   style,
-}: ButtonComponent) => {
-  console.log({ flex });
+  onClick,
+}: ButtonComponent & { onClick?: ClickHandler | undefined }) => {
+  const handleClick = () => {
+    if (action) {
+      onClick?.(action);
+    }
+  };
+
   return (
     <a
       href="#"
@@ -40,6 +47,7 @@ export const Button = ({
         height: getButtonHeight(height),
         backgroundColor: color,
       }}
+      onClick={handleClick}
     >
       {action.type === "uri" && action.label}
     </a>
