@@ -1,6 +1,7 @@
 import FlexMessageJSON from "@ohmyteeth/line-flex-message-renderer-sample-fixtures/fixtures/receipt.json" with { type: "json" };
 import { FlexMessageRenderer } from "@ohmyteeth/react-line-flex-message-renderer";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "vitest";
 
 const meta = {
   title: "FlexMessage/Receipt",
@@ -26,4 +27,7 @@ export const Primary: Story = {
     json: JSON.stringify(FlexMessageJSON, null, 2),
   },
   render: (args) => <FlexMessageRenderer {...args} />,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toMatchScreenshot("receipt-rendered");
+  },
 };
