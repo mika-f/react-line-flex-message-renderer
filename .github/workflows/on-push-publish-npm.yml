@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -18,13 +18,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-      
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
       - uses: pnpm/action-setup@v4
         with:
           version: latest
-      
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
-      - run: pnpm publish --no-git-checks
+      - run: pnpm -r --filter "./packages/*" publish --access public --provenance --no-git-checks
