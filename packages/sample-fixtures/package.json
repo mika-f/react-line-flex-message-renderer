@@ -1,5 +1,6 @@
 {
   "name": "@ohmyteeth/line-flex-message-renderer-sample-fixtures",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "scripts": {
