@@ -28,3 +28,6 @@ storybook-static
 
 # Vitest (VRT)
 .vitest-attachments/
+
+# Turborepo
+.turbo/
