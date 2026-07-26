@@ -40,6 +40,9 @@
   },
   "scripts": {
     "generate": "cmk",
+    "dev": "run-p dev:*",
+    "dev:cmk": "cmk --watch",
+    "dev:tsdown": "tsdown --watch",
     "build": "pnpm run generate && tsdown",
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -58,6 +61,7 @@
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "npm-run-all2": "^9.0.2",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
     "react": "^19.2.7",

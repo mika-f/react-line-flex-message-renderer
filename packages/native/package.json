@@ -39,6 +39,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "dev": "run-p dev:*",
+    "dev:tsdown": "tsdown --watch",
     "build": "tsup",
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -72,6 +74,7 @@
     "@storybook/react-native": "^10.5.0",
     "@storybook/react-native-ui-lite": "^10.5.0",
     "@types/node": "^26.1.1",
+    "npm-run-all2": "^9.0.2",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
     "react": "^19.2.7",
@@ -84,7 +87,8 @@
     "react-native-svg": "^15.15.5",
     "react-native-worklets": "^0.10.2",
     "storybook": "^10.5.0",
-    "tsup": "^8.5.1",
+    "tsdown": "^0.22.5",
+    "typescript": "^5.8.2",
     "vitest": "^4.1.10"
   },
   "peerDependencies": {

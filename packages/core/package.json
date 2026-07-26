@@ -36,6 +36,8 @@
     }
   },
   "scripts": {
+    "dev": "run-p dev:*",
+    "dev:tsdown": "tsdown --watch",
     "build": "tsdown",
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
     "test": "vitest run",
@@ -49,6 +51,7 @@
     "@oxlint/binding-win32-x64-msvc": "^1.73.0",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
+    "npm-run-all2": "^9.0.2",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
     "react": "^19.2.7",
