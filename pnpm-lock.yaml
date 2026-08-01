@@ -144,9 +144,9 @@ importers:
       '@ohmyteeth/line-flex-message-renderer-sample-fixtures':
         specifier: workspace:*
         version: link:../sample-fixtures
-      '@ohmyteeth/react-line-flex-message-renderer':
+      '@ohmyteeth/react-native-line-flex-message-renderer':
         specifier: workspace:*
-        version: link:../web
+        version: link:../native
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.86.0(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/metro-config@0.86.0(@babel/core@7.28.6))(@types/react@19.2.17)(react@19.2.3))
