@@ -7,6 +7,22 @@ import type {
   Spacing,
 } from "../interfaces/components/property-types.js";
 
+export const getActualSize = (size?: `${number}px` | `${number}%`): number | `${number}%` | undefined => {
+  if (size === undefined) {
+    return undefined;
+  }
+
+  if (size.endsWith("px")) {
+    return parseInt(size, 10);
+  }
+
+  if (size.endsWith("%")) {
+    return size as `${number}%`;
+  }
+
+  return undefined;
+};
+
 export const getIconSize = (size?: IconSize) => {
   switch (size) {
     case "xxs":
@@ -204,7 +220,12 @@ export const getImageSize = (size?: ImageSize) => {
     case "full":
       return "100%";
 
-    default:
+    default: {
+      if (size?.endsWith("px") || size?.endsWith("%")) {
+        return size;
+      }
+
       return "unset";
+    }
   }
 };
