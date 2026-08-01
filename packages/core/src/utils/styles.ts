@@ -23,6 +23,18 @@ export const getActualSize = (size?: `${number}px` | `${number}%`): number | `${
   return undefined;
 };
 
+export const getActualNumericSize = (size?: `${number}px` | `${number}%`): number | undefined => {
+  if (size === undefined) {
+    return undefined;
+  }
+
+  if (size.endsWith("px")) {
+    return parseInt(size, 10);
+  }
+
+  return undefined;
+};
+
 export const getIconSize = (size?: IconSize) => {
   switch (size) {
     case "xxs":

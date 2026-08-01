@@ -1,10 +1,9 @@
 import {
   renderComponent,
-  type Action,
   type BubbleContainer,
   type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export const Bubble = ({
   body,
@@ -20,9 +19,9 @@ export const Bubble = ({
   const hasHero = !!hero;
   const hasFooter = !!footer;
   const hasHeader = !!header;
-  const handleClick = (action: Action) => {
-    if (onClick) {
-      onClick(action);
+  const handleClick = () => {
+    if (action) {
+      onClick?.(action);
     }
   };
 
@@ -38,75 +37,66 @@ export const Bubble = ({
   };
 
   return (
-    <div style={{ ...Styles.bubble, ...Styles[size ?? "mega"] }}
-      dir={direction}
-      onClick={action ? () => handleClick(action) : undefined}
-    >
-      <div style={inner}>
+    <TouchableOpacity style={{ ...Styles.bubble, ...Styles[size ?? "mega"] }} onPress={handleClick}>
+      <View style={inner}>
         {header && (
-          <div
+          <View
             style={{
               backgroundColor: style?.header?.backgroundColor ?? "#fff",
-              borderBottom: style?.header?.separator
-                ? `1px solid ${style?.header?.separatorColor ?? "#000"}`
-                : "none",
+              borderBottomWidth: style?.header?.separator ? 1 : 0,
               borderColor: style?.header?.separatorColor ?? "#000",
             }}
           >
             {renderComponent(header, onClick)}
-          </div>
+          </View>
         )}
 
         {hero && (
-          <div style={{ backgroundColor: style?.hero?.backgroundColor ?? "#fff" }}          >
+          <View style={{ backgroundColor: style?.hero?.backgroundColor ?? "#fff" }}>
             {renderComponent(hero, onClick)}
-          </div>
+          </View>
         )}
 
         {body && (
-          <div style={{
-            ...Styles.body,
-            ...(hasHeader && !body.paddingAll && Styles.bodyWithHeader),
-            ...(hasHero && Styles.bodyWithHero),
-            ...(hasFooter && Styles.bodyWithFooter),
-            ...(!body.paddingAll && Styles.withPadding),
-            backgroundColor: style?.body?.backgroundColor ?? "#fff",
-          }}
+          <View
+            style={{
+              ...Styles.body,
+              ...(hasHeader && !body.paddingAll && Styles.bodyWithHeader),
+              ...(hasHero && Styles.bodyWithHero),
+              ...(hasFooter && Styles.bodyWithFooter),
+              ...(!body.paddingAll && Styles.withPadding),
+              backgroundColor: style?.body?.backgroundColor ?? "#fff",
+            }}
           >
             {renderComponent(body, onClick)}
-          </div>
+          </View>
         )}
 
         {footer && (
-          <div
+          <View
             style={{
               ...Styles.footer,
               backgroundColor: style?.footer?.backgroundColor ?? "#fff",
-              borderTop: style?.footer?.separator
-                ? `1px solid ${style?.footer?.separatorColor ?? "#000"}`
-                : "none",
+              borderTopWidth: style?.footer?.separator ? 1 : 0,
               borderColor: style?.footer?.separatorColor ?? "#000",
             }}
           >
             {renderComponent(footer, onClick)}
-          </div>
+          </View>
         )}
-      </div>
-    </div >
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const Styles = StyleSheet.create({
   bubble: {
-    display: "flex",
     flexDirection: "column",
     width: "100%",
   },
   bubbleInner: {
-    display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    height: "100%",
   },
   nano: {
     width: 120,
@@ -155,10 +145,9 @@ const Styles = StyleSheet.create({
     maxWidth: 340,
   },
   gigaInner: {
-    borderRadius: 20
+    borderRadius: 20,
   },
   body: {
-    height: "100%",
     flexGrow: 1,
   },
   withPadding: {
@@ -174,6 +163,6 @@ const Styles = StyleSheet.create({
     paddingBottom: 10,
   },
   footer: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
