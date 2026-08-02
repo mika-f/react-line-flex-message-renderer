@@ -28,7 +28,12 @@ export const Image = ({
   onClick,
 }: ImageComponent & { onClick?: ClickHandler | undefined }) => {
   const rawWidth = getImageSize(size);
-  const width = rawWidth === "unset" ? undefined : getActualSize(rawWidth);
+  const sizeWidth = rawWidth === "unset" ? undefined : getActualSize(rawWidth);
+  // When `flex` is meant to grow this image within a row/column of siblings, let it fill 100% of
+  // whatever space it's allocated instead of the fixed `size` width — otherwise the fixed width fights
+  // the flex-grown container for space (the fixed width wins, and the image can end up misplaced or
+  // fully covered by a sibling that gets laid out for the space the image should have used).
+  const width = flex ? "100%" : sizeWidth;
   const handleClick = () => {
     if (action) {
       onClick?.(action);
@@ -40,11 +45,26 @@ export const Image = ({
       style={{
         flexDirection: "row",
         justifyContent: "center",
-        flex: flex === 0 ? 0 : flex,
+        // Explicit flexGrow/flexShrink, not the bare `flex` shorthand (only to avoid ambiguity — the
+        // shorthand's implied flexBasis:0% is actually what we want here, unlike box.tsx/text.tsx).
+        // flexBasis stays "0", not "auto": an "auto" basis makes RN measure this View's content to find
+        // its natural size, and Image's own natural-size measurement falls back to the source asset's
+        // native pixel size instead of respecting `width`, letting one image claim all of its siblings'
+        // space. Basis 0 sidesteps that measurement entirely — the final size is already fully
+        // determined by the explicit width/aspectRatio below regardless of the starting basis.
+        ...(flex !== undefined
+          ? { flexGrow: flex === 0 ? 0 : flex, flexShrink: 0, flexBasis: flex === 0 ? "auto" : 0 }
+          : { flexShrink: 1 }),
         // Same rule as below: only force a % height when width can't drive sizing on its own — otherwise
         // this resolves against whatever definite height it finds further up and stretches the whole card.
         ...(width === undefined ? { height: "100%" } : {}),
-        ...(margin ? { margin: getActualSize(getMarginSize(margin)) } : { marginTop: 0, marginBottom: 0, marginRight: "auto", marginLeft: "auto" }),
+        // Auto left/right margins center a naturally-sized image, but they compete with flexGrow for the
+        // same leftover space — skip them when `flex` is meant to actually grow this image instead.
+        ...(margin
+          ? { margin: getActualSize(getMarginSize(margin)) }
+          : flex
+            ? {}
+            : { marginTop: 0, marginBottom: 0, marginRight: "auto", marginLeft: "auto" }),
       }}
     >
       {/* Only one of width/height may be definite — the other must stay unset so aspectRatio can derive it. */}

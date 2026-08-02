@@ -13,6 +13,7 @@ import {
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import React from "react";
 import { TouchableOpacity, type ViewStyle } from "react-native";
+import { ParentFlexDirectionProvider, useParentFlexDirection } from "../hooks/useParentFlexDirection.js";
 
 export const Box = ({
   layout,
@@ -49,6 +50,8 @@ export const Box = ({
       onClick?.(action);
     }
   };
+  const parentDirection = useParentFlexDirection();
+  const ownDirection = layout === "vertical" ? "column" : "row";
 
   const containerStyle: ViewStyle = {
     ...(layout === "baseline"
@@ -56,9 +59,17 @@ export const Box = ({
       : layout === "horizontal"
         ? { flexDirection: "row", columnGap: getActualSize(getSpacingSize(spacing)) }
         : { flexDirection: "column", rowGap: getActualSize(getSpacingSize(spacing)) }),
+    // flexBasis of 0 only makes sense along the parent's main axis when that axis has a definite total to
+    // distribute — true for "row" parents here (bubble width is always fixed), but not for "column"
+    // parents (bubble height is always auto/content-driven). In a "column" parent, flexBasis:0 makes this
+    // box contribute nothing to that auto-height calculation, collapsing the whole ancestor chain to 0.
     ...(flex !== undefined
-      ? { flexGrow: flex === 0 ? 0 : flex, flexShrink: 0, flexBasis: flex === 0 ? "auto" : 0 }
-      : {}),
+      ? {
+          flexGrow: flex === 0 ? 0 : flex,
+          flexShrink: 0,
+          flexBasis: flex === 0 || parentDirection === "column" ? "auto" : 0,
+        }
+      : { flexShrink: 1 }),
     width: getActualSize(width) ?? (layout === "baseline" ? "100%" : undefined),
     maxWidth: getActualSize(maxWidth),
     height: getActualSize(height),
@@ -67,6 +78,10 @@ export const Box = ({
     borderColor,
     borderWidth: getActualNumericSize(getBorderWidth(borderWidth)),
     borderRadius: getActualNumericSize(getBorderRadius(cornerRadius)),
+    // Unlike CSS, RN's borderRadius only rounds this box's own background/border — it doesn't clip
+    // children to the rounded shape unless overflow is also hidden (e.g. a square image inside a
+    // circular avatar box would otherwise cover the rounded corners entirely).
+    ...(cornerRadius !== undefined ? { overflow: "hidden" } : {}),
     paddingTop: getActualSize(getPaddingSize(paddingTop)),
     paddingBottom: getActualSize(getPaddingSize(paddingBottom)),
     paddingLeft: getActualSize(getPaddingSize(paddingStart)),
@@ -85,9 +100,11 @@ export const Box = ({
 
   return (
     <TouchableOpacity style={containerStyle} onPress={handleClick}>
-      {contents.map((content, i) => (
-        <React.Fragment key={i}>{renderComponent(content)}</React.Fragment>
-      ))}
+      <ParentFlexDirectionProvider direction={ownDirection}>
+        {contents.map((content, i) => (
+          <React.Fragment key={i}>{renderComponent(content)}</React.Fragment>
+        ))}
+      </ParentFlexDirectionProvider>
     </TouchableOpacity>
   );
 };

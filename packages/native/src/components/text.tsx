@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { Text as RNText, TouchableOpacity, type TextStyle, type ViewStyle } from "react-native";
 import { MarginSizeProvider } from "../hooks/useInheritedMarginSize.js";
+import { useParentFlexDirection } from "../hooks/useParentFlexDirection.js";
 
 export const Text = ({
   text,
@@ -36,6 +37,7 @@ export const Text = ({
   action,
   onClick,
 }: TextComponent & { onClick?: ClickHandler | undefined }) => {
+  const parentDirection = useParentFlexDirection();
   const handleClick = () => {
     if (action) {
       onClick?.(action);
@@ -49,11 +51,24 @@ export const Text = ({
   const marginSize = getActualSize(getMarginSize(margin)) as number | undefined;
 
   const containerStyle: ViewStyle = {
-    // Only override flex sizing when `flex` is actually specified — otherwise flexBasis:0 would force
-    // this Text to zero height whenever its parent Box has a fixed (non-content-driven) height.
+    // Only override flex sizing when `flex` is actually specified. flexBasis:0 only makes sense along a
+    // "row" parent's main axis (bubble width is always fixed) — a "column" parent's height is always
+    // auto/content-driven, and flexBasis:0 there makes this Text contribute nothing to that calculation,
+    // collapsing the whole auto-height ancestor chain. See box.tsx for the fuller explanation.
+    // No flexShrink default when `flex` is undefined (unlike box.tsx): a plain label Text (e.g. "ITEMS"
+    // next to a right-aligned price) needs to hold its natural width so its "align:end" sibling below is
+    // the one that shrinks to fit — making this Text shrinkable too would let both compete for the same
+    // space and truncate the label.
     ...(flex !== undefined
-      ? { flexGrow: flex === 0 ? 0 : flex, flexShrink: 0, flexBasis: flex === 0 ? "auto" : 0 }
+      ? {
+          flexGrow: flex === 0 ? 0 : flex,
+          flexShrink: 0,
+          flexBasis: flex === 0 || parentDirection === "column" ? "auto" : 0,
+        }
       : {}),
+    // The space `margin` describes is this Text's own gap before its previous sibling — it must be
+    // applied here too, not just forwarded to children via MarginSizeProvider below.
+    marginTop: marginSize,
     top: getActualSize(getOffset(offsetTop)),
     bottom: getActualSize(getOffset(offsetBottom)),
     left: getActualSize(getOffset(offsetStart)),
