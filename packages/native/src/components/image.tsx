@@ -7,6 +7,7 @@ import {
   getActualSize,
 } from "@ohmyteeth/line-flex-message-renderer-core";
 import { Image as RNImage, TouchableOpacity, View } from "react-native";
+import { useParentFlexDirection } from "../hooks/useParentFlexDirection.js";
 
 export const Image = ({
   url,
@@ -27,6 +28,7 @@ export const Image = ({
   action,
   onClick,
 }: ImageComponent & { onClick?: ClickHandler | undefined }) => {
+  const parentDirection = useParentFlexDirection();
   const rawWidth = getImageSize(size);
   const sizeWidth = rawWidth === "unset" ? undefined : getActualSize(rawWidth);
   // When `flex` is meant to grow this image within a row/column of siblings, let it fill 100% of
@@ -60,8 +62,12 @@ export const Image = ({
         ...(width === undefined ? { height: "100%" } : {}),
         // Auto left/right margins center a naturally-sized image, but they compete with flexGrow for the
         // same leftover space — skip them when `flex` is meant to actually grow this image instead.
+        // `margin` itself is space along whichever axis the parent lays siblings out on — marginTop in a
+        // "column" parent, marginLeft in a "row" (horizontal/baseline) parent.
         ...(margin
-          ? { margin: getActualSize(getMarginSize(margin)) }
+          ? parentDirection === "column"
+            ? { marginTop: getActualSize(getMarginSize(margin)) }
+            : { marginLeft: getActualSize(getMarginSize(margin)) }
           : flex
             ? {}
             : { marginTop: 0, marginBottom: 0, marginRight: "auto", marginLeft: "auto" }),

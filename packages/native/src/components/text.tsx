@@ -66,9 +66,10 @@ export const Text = ({
           flexBasis: flex === 0 || parentDirection === "column" ? "auto" : 0,
         }
       : {}),
-    // The space `margin` describes is this Text's own gap before its previous sibling — it must be
-    // applied here too, not just forwarded to children via MarginSizeProvider below.
-    marginTop: marginSize,
+    // The space `margin` describes is this Text's own gap before its previous sibling, along whichever
+    // axis the parent actually lays siblings out on — marginTop in a "column" (vertical) parent, but
+    // marginLeft in a "row" (horizontal/baseline) parent, matching the web port's per-direction CSS.
+    ...(parentDirection === "column" ? { marginTop: marginSize } : { marginLeft: marginSize }),
     top: getActualSize(getOffset(offsetTop)),
     bottom: getActualSize(getOffset(offsetBottom)),
     left: getActualSize(getOffset(offsetStart)),

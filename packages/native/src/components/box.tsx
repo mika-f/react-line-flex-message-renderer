@@ -87,7 +87,11 @@ export const Box = ({
     paddingLeft: getActualSize(getPaddingSize(paddingStart)),
     paddingRight: getActualSize(getPaddingSize(paddingEnd)),
     padding: getActualSize(getPaddingSize(paddingAll)),
-    marginTop: getActualSize(getMarginSize(margin)),
+    // Same rule as text.tsx: `margin` is space along whichever axis the parent lays siblings out on —
+    // marginTop in a "column" parent, marginLeft in a "row" (horizontal/baseline) parent.
+    ...(parentDirection === "column"
+      ? { marginTop: getActualSize(getMarginSize(margin)) }
+      : { marginLeft: getActualSize(getMarginSize(margin)) }),
     position: position === undefined ? "relative" : position,
     alignItems,
     justifyContent,
