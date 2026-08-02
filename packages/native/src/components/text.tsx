@@ -60,6 +60,10 @@ export const Text = ({
     right: getActualSize(getOffset(offsetEnd)),
     position: position === undefined ? "relative" : position,
     width: align === "center" || (align === "end" && flex !== 0) ? "100%" : undefined,
+    // RN defaults flexShrink to 0 (web defaults to 1), so without this a "100%"-wide row item can't
+    // shrink to fit whatever space its siblings left behind and instead overflows past the card edge.
+    // Skipped when `flex` is explicitly set, since that case is already fully handled above.
+    ...((align === "center" || align === "end") && flex === undefined ? { flexShrink: 1 } : {}),
   };
 
   const textStyle: TextStyle = {

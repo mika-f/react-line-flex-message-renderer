@@ -6,7 +6,7 @@ import {
   type ButtonComponent,
   type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
-import { TouchableOpacity as Touchable, View } from "react-native";
+import { Text, TouchableOpacity as Touchable, View } from "react-native";
 
 export const Button = ({
   action,
@@ -30,13 +30,13 @@ export const Button = ({
       onClick?.(action);
     }
   };
+  const textColor = style === "link" ? "#42659a" : "#fff";
 
   return (
     <Touchable onPress={handleClick}>
       <View
         style={{
           ...(style === "primary" ? {
-            color: "#fff",
             backgroundColor: "#17c950",
             width: "100%",
             paddingTop: 0,
@@ -51,9 +51,7 @@ export const Button = ({
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "transparent",
-            color: "#42659a",
           } : {}),
-          display: "flex",
           flex: flex === 0 ? 0 : flex,
           flexShrink: 0,
           flexGrow: flex === 0 ? 0 : 1,
@@ -67,7 +65,7 @@ export const Button = ({
           backgroundColor: color,
         }}
       >
-        {action.type === "uri" && action.label}
+        {action.type === "uri" && <Text style={{ color: textColor }}>{action.label}</Text>}
       </View>
     </Touchable>
   );
