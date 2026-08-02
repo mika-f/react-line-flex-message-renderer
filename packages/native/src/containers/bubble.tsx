@@ -97,6 +97,7 @@ const Styles = StyleSheet.create({
   bubbleInner: {
     flexDirection: "column",
     overflow: "hidden",
+    borderRadius: 10,
   },
   nano: {
     width: 120,
@@ -117,21 +118,21 @@ const Styles = StyleSheet.create({
     maxWidth: 220,
   },
   decaInner: {
-    borderRadius: 10, /* TODO */
+    borderRadius: 10,
   },
   hecto: {
     width: 241,
     maxWidth: 241,
   },
   hectoInner: {
-    borderRadius: 10, /* TODO */
+    borderRadius: 10,
   },
   kilo: {
     width: 260,
     maxWidth: 260,
   },
   kiloInner: {
-    borderRadius: 10, /* TODO */
+    borderRadius: 10,
   },
   mega: {
     width: 300,
@@ -145,7 +146,7 @@ const Styles = StyleSheet.create({
     maxWidth: 340,
   },
   gigaInner: {
-    borderRadius: 20,
+    borderRadius: 5,
   },
   body: {
     flexGrow: 1,
