@@ -37,16 +37,28 @@
 .deca {
   width: 220px;
   max-width: 220px;
+
+  .inner {
+    border-radius: 10px;
+  }
 }
 
 .hecto {
   width: 241px;
   max-width: 241px;
+
+  .inner {
+    border-radius: 10px;
+  }
 }
 
 .kilo {
   width: 260px;
   max-width: 260px;
+
+  .inner {
+    border-radius: 10px;
+  }
 }
 
 .mega {
@@ -63,7 +75,7 @@
   max-width: 340px;
 
   .inner {
-    border-radius: 20px;
+    border-radius: 5px;
   }
 }
 
