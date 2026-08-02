@@ -30,13 +30,15 @@ export const Button = ({
       onClick?.(action);
     }
   };
-  const textColor = style === "link" ? "#42659a" : "#fff";
+  // LINE's default button style is "link" when unspecified (matches the web port's `style ?? "link"`).
+  const resolvedStyle = style ?? "link";
+  const textColor = resolvedStyle === "primary" ? "#fff" : resolvedStyle === "link" ? "#42659a" : undefined;
 
   return (
     <Touchable onPress={handleClick}>
       <View
         style={{
-          ...(style === "primary" ? {
+          ...(resolvedStyle === "primary" ? {
             backgroundColor: "#17c950",
             width: "100%",
             paddingTop: 0,
@@ -47,14 +49,18 @@ export const Button = ({
             alignItems: "center",
             borderRadius: 8,
           } : {}),
-          ...(style === "link" ? {
+          ...(resolvedStyle === "link" ? {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "transparent",
           } : {}),
-          flex: flex === 0 ? 0 : flex,
-          flexShrink: 0,
-          flexGrow: flex === 0 ? 0 : 1,
+          // "secondary" has no dedicated look in the web port either (its CSS class is empty) — it just
+          // renders as a plain, unstyled box with default text color.
+          // Only override flex sizing when `flex` is actually specified (see text.tsx/box.tsx for why).
+          // flexBasis is explicitly "auto" (matching the web port's `flex 0 auto`, not `flex 0 0`) so the
+          // explicit `height` below still wins — an explicit flexBasis otherwise overrides `height`
+          // entirely for flex layout, collapsing the button whenever its parent has no space to grow into.
+          ...(flex !== undefined ? { flexGrow: flex === 0 ? 0 : flex, flexShrink: 0, flexBasis: "auto" } : {}),
           top: getActualSize(getOffset(offsetTop)),
           bottom: getActualSize(getOffset(offsetBottom)),
           left: getActualSize(getOffset(offsetStart)),
@@ -62,7 +68,9 @@ export const Button = ({
           marginTop: getActualSize(getMarginSize(margin)),
           position: position === undefined ? "relative" : position,
           height: getActualSize(getButtonHeight(height)),
-          backgroundColor: color,
+          // `color` should only override the style preset's background when it's actually provided —
+          // otherwise this erases the "primary" green / makes "link" buttons blend into the card.
+          ...(color !== undefined ? { backgroundColor: color } : {}),
         }}
       >
         {action.type === "uri" && <Text style={{ color: textColor }}>{action.label}</Text>}

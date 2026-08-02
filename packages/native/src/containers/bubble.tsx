@@ -3,7 +3,7 @@ import {
   type BubbleContainer,
   type ClickHandler,
 } from "@ohmyteeth/line-flex-message-renderer-core";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, type StyleProp, type ViewStyle, type LayoutChangeEvent } from "react-native";
 
 export const Bubble = ({
   body,
@@ -15,7 +15,15 @@ export const Bubble = ({
   style,
   action,
   onClick,
-}: BubbleContainer & { onClick?: ClickHandler | undefined }) => {
+  containerStyle,
+  onLayout,
+}: BubbleContainer & {
+  onClick?: ClickHandler | undefined;
+  // Native-only, not part of the Flex Message spec: lets Carousel measure every bubble's natural height
+  // and stretch them all to match the tallest one, since ScrollView content doesn't do this on its own.
+  containerStyle?: StyleProp<ViewStyle>;
+  onLayout?: (event: LayoutChangeEvent) => void;
+}) => {
   const hasHero = !!hero;
   const hasFooter = !!footer;
   const hasHeader = !!header;
@@ -27,6 +35,9 @@ export const Bubble = ({
 
   const inner = {
     ...Styles.bubbleInner,
+    // Only when Carousel hands us an explicit (now definite, non-percentage) height to match: without
+    // this, bubbleInner stays content-sized and the extra space added below is just blank/transparent.
+    ...(containerStyle !== undefined && { flexGrow: 1 }),
     ...(size === "nano" && Styles.nanoInner),
     ...(size === "micro" && Styles.microInner),
     ...(size === "deca" && Styles.decaInner),
@@ -37,7 +48,11 @@ export const Bubble = ({
   };
 
   return (
-    <TouchableOpacity style={{ ...Styles.bubble, ...Styles[size ?? "mega"] }} onPress={handleClick}>
+    <TouchableOpacity
+      style={[{ ...Styles.bubble, ...Styles[size ?? "mega"] }, containerStyle]}
+      onPress={handleClick}
+      onLayout={onLayout}
+    >
       <View style={inner}>
         {header && (
           <View
