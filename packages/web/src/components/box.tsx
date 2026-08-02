@@ -1,4 +1,6 @@
 import {
+  getBorderRadius,
+  getBorderWidth,
   getMarginSize,
   getOffset,
   getPaddingSize,
@@ -69,19 +71,19 @@ export const Box = ({
       style={{
         ...(layout === "baseline"
           ? {
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "baseline",
-              width: "100%",
-              columnGap: getSpacingSize(spacing),
-            }
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "baseline",
+            width: "100%",
+            columnGap: getSpacingSize(spacing),
+          }
           : layout === "horizontal"
             ? { display: "flex", flexDirection: "row", columnGap: getSpacingSize(spacing) }
             : {
-                display: "flex",
-                flexDirection: "column",
-                rowGap: getSpacingSize(spacing),
-              }),
+              display: "flex",
+              flexDirection: "column",
+              rowGap: getSpacingSize(spacing),
+            }),
         flex: flex ? (flex === 0 ? "none" : flex) : undefined,
         width,
         maxWidth,
@@ -89,8 +91,8 @@ export const Box = ({
         maxHeight,
         backgroundColor,
         borderColor,
-        borderWidth,
-        borderRadius: cornerRadius,
+        borderWidth: getBorderWidth(borderWidth),
+        borderRadius: getBorderRadius(cornerRadius),
         paddingTop: getPaddingSize(paddingTop),
         paddingBottom: getPaddingSize(paddingBottom),
         paddingLeft: getPaddingSize(paddingStart),

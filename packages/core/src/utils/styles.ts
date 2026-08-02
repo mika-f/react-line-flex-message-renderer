@@ -1,4 +1,6 @@
 import type {
+  BorderWidth,
+  CornerRadius,
   IconSize,
   ImageSize,
   Margin,
@@ -239,5 +241,58 @@ export const getImageSize = (size?: ImageSize) => {
 
       return "unset";
     }
+  }
+};
+
+export const getBorderWidth = (size?: BorderWidth) => {
+  switch (size) {
+    case "none":
+      return "0px";
+
+    case "light":
+      return "0.5px";
+
+    case "normal":
+      return "1px";
+
+    case "medium":
+      return "2px";
+
+    case "semi-bold":
+      return "3px";
+
+    case "bold":
+      return "4px";
+
+    default:
+      return size;
+  }
+};
+
+export const getBorderRadius = (size?: CornerRadius) => {
+  switch (size) {
+    case "none":
+      return "0px";
+
+    case "xs":
+      return "2px";
+
+    case "sm":
+      return "4px";
+
+    case "md":
+      return "8px";
+
+    case "lg":
+      return "12px";
+
+    case "xl":
+      return "16px";
+
+    case "xxl":
+      return "20px";
+
+    default:
+      return size;
   }
 };
