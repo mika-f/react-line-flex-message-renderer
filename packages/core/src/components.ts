@@ -61,5 +61,11 @@ export const renderComponent = (
     }
   };
 
-  return component(data, handleClick);
+  // Must go through React.createElement (not a plain `component(data, handleClick)` call) so this
+  // actually becomes its own component instance in React's tree. A plain call runs the registered
+  // function's hooks as part of *this* caller's render pass instead of its own — breaking useState,
+  // useContext (a child's `useContext` would read the value visible to its parent, not what the parent's
+  // own JSX provides below it), and silently dropping `onClick` too, since these components declare a
+  // single props parameter, not the `(data, onClick)` shape this was calling them with.
+  return React.createElement(component as React.ComponentType<any>, { ...data, onClick: handleClick });
 };
