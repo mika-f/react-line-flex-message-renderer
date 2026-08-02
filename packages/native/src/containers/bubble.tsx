@@ -77,7 +77,10 @@ export const Bubble = ({
             style={{
               ...Styles.body,
               ...(hasHeader && !body.paddingAll && Styles.bodyWithHeader),
-              ...(hasHero && Styles.bodyWithHero),
+              // The web port zeroes this out specifically for "micro" bubbles (see its CSS), since a
+              // micro body commonly sets its own smaller `paddingAll` — without this exception the two
+              // paddings stack (this wrapper's 20px plus the body Box's own), roughly doubling the gap.
+              ...(hasHero && size !== "micro" && Styles.bodyWithHero),
               ...(hasFooter && Styles.bodyWithFooter),
               ...(!body.paddingAll && Styles.withPadding),
               backgroundColor: style?.body?.backgroundColor ?? "#fff",

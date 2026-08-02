@@ -82,6 +82,13 @@ export const Text = ({
     ...((align === "center" || align === "end") && flex === undefined ? { flexShrink: 1 } : {}),
   };
 
+  // RN has a known bug where a Text with numberOfLines inside an `alignItems:"baseline"` row can size its
+  // container to the text's full untruncated height even though the text itself renders truncated (see
+  // https://github.com/facebook/react-native/issues/35276). Row/baseline labels are short by convention
+  // and the "align:end" siblings already shrink-to-fit instead of truncating, so it's safe to just not
+  // cap line count there rather than risk that bug.
+  const numberOfLines = maxLines ?? (wrap || parentDirection !== "column" ? undefined : 1);
+
   const textStyle: TextStyle = {
     color,
     fontSize: getActualSize(getIconSize(size)) as number | undefined,
@@ -95,7 +102,7 @@ export const Text = ({
     return (
       <TouchableOpacity style={containerStyle} onPress={handleClick}>
         <MarginSizeProvider marginSize={marginSize}>
-          <RNText style={textStyle} numberOfLines={maxLines ?? (wrap ? undefined : 1)} ellipsizeMode="tail">
+          <RNText style={textStyle} numberOfLines={numberOfLines} ellipsizeMode="tail">
             {text}
           </RNText>
         </MarginSizeProvider>
@@ -107,7 +114,7 @@ export const Text = ({
     return (
       <TouchableOpacity style={containerStyle} onPress={handleClick}>
         <MarginSizeProvider marginSize={marginSize}>
-          <RNText style={textStyle} numberOfLines={maxLines ?? (wrap ? undefined : 1)} ellipsizeMode="tail">
+          <RNText style={textStyle} numberOfLines={numberOfLines} ellipsizeMode="tail">
             {contents.map((content, index) => (
               <React.Fragment key={index}>{renderComponent(content)}</React.Fragment>
             ))}

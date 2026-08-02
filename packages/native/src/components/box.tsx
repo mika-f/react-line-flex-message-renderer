@@ -93,7 +93,11 @@ export const Box = ({
       ? { marginTop: getActualSize(getMarginSize(margin)) }
       : { marginLeft: getActualSize(getMarginSize(margin)) }),
     position: position === undefined ? "relative" : position,
-    alignItems,
+    // `alignItems` here (from the JSON) must win when explicitly set, but otherwise must NOT blindly
+    // override the "baseline" set above for `layout:"baseline"` — it was doing exactly that (since this
+    // key appears later in the same object), silently turning every baseline row into RN's default
+    // "stretch" instead, which stretches every child to match the tallest sibling's height.
+    alignItems: alignItems ?? (layout === "baseline" ? "baseline" : undefined),
     justifyContent,
     top: getActualSize(getOffset(offsetTop)),
     bottom: getActualSize(getOffset(offsetBottom)),
